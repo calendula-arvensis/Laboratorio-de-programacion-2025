@@ -2,7 +2,7 @@
 import java.util.concurrent.RecursiveTask;
 
 public class MatrixAvgTask extends RecursiveTask<double[]> {
-    private static final int UMBRAL_FILAS = 200; // ajustá según N
+    private static final int UMBRAL_FILAS = 25_000; // ajustá según N
     private final double[][] notas;
     private final int filaInicio; // inclusivo
     private final int filaFin;    // exclusivo
