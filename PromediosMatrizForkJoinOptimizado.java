@@ -100,5 +100,7 @@ public class PromediosMatrizForkJoinOptimizado {
         //Mostramos los resultados
         System.out.println("Tiempo paralelo (Fork/Join): " + msPar);
         System.out.println("Tiempo secuencial          : " + msSeq);
+
+        pool.shutdown();
     }
 }

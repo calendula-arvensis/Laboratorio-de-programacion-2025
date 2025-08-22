@@ -125,5 +125,7 @@ public class DemoPromediosForkJoin {
         int profundidad = (int)Math.ceil(Math.log(Math.max(1, hojasAprox)) / Math.log(2));
         System.out.printf("Hojas ~%d | Profundidad ~%d | Paralelismo pool=%d%n",
                 hojasAprox, profundidad, pool.getParallelism());
+
+        pool.shutdown();
     }
 }
