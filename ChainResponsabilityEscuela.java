@@ -1,5 +1,8 @@
 
 // Handler Interface
+
+import java.util.Scanner;
+
 interface SupportHandler {
     void handleRequest(Request solicitud);
     void setNextHandler(SupportHandler nextHandler);
@@ -88,26 +91,38 @@ class Request {
 
 // Priority Enum
 enum Priority {
-    BASIC, INTERMEDIATE, CRITICAL
+    BASIC, INTERMEDIATE, CRITICAL, INVALID
 }
 
 // Main Class
 public class ChainResponsabilityEscuela {
-    //Mejorar main luego
+    //ejecutar desde el run de abajo 
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int opcion;
+        Request solicitud;
         SupportHandler profesor = new HandlerProfesor();
         SupportHandler coordinadorAcademico = new HandlerCoordinadorAcademico();
         SupportHandler secretaria = new HandlerSecretaria();
 
         profesor.setNextHandler(coordinadorAcademico);
         coordinadorAcademico.setNextHandler(secretaria);
-
-        Request request1 = new Request(Priority.BASIC);
-        Request request2 = new Request(Priority.INTERMEDIATE);
-        Request request3 = new Request(Priority.CRITICAL);
-
-        profesor.handleRequest(request1);
-        profesor.handleRequest(request2);
-        profesor.handleRequest(request3);
+        System.out.println("Ingrese el numero de la solicitud que desea ingresar: ");
+        System.out.println("\n 1. Permiso para entregar una tarea tarde. "
+                          +"\n 2. Permiso para realizar un examen en otra fecha. "
+                          +"\n 3. Permiso para cambio de curso. "
+                          +"\n 4. Permiso para certificado de alumno regular. "
+                          +"\n 5. Permiso para aprobar una beca. ");
+        opcion= sc.nextInt();
+        if (opcion==1 || opcion==2){
+            solicitud = new Request(Priority.BASIC);
+        }else if(opcion==3 || opcion ==4){
+            solicitud = new Request (Priority.INTERMEDIATE);
+        }else if (opcion ==5){
+            solicitud = new Request (Priority.CRITICAL);
+        }else{
+            solicitud= new Request(Priority.INVALID);
+        }
+        profesor.handleRequest(solicitud);
     }
 }
