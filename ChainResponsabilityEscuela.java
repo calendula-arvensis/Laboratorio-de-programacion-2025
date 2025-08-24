@@ -22,7 +22,7 @@ class HandlerProfesor implements SupportHandler {
         if (solicitud.getPriority() == Priority.BASIC) {
             System.out.println("Un profesor se encargó de tu solicitud. ");
             int num = (int)(Math.random() * 10);
-            if(num%10==0){
+            if(num%2==0){
                 System.out.println("El profesor aceptó la solicitud");
             }else{
                 System.out.println("El profesor rechazó la solicitud");
@@ -44,7 +44,7 @@ class HandlerCoordinadorAcademico implements SupportHandler {
         if (solicitud.getPriority() == Priority.INTERMEDIATE) {
             System.out.println("El coordinador academico se encargó de la consulta. ");
             int num = (int)(Math.random() * 10);
-            if(num%10==0){
+            if(num%2==0){
                 System.out.println("El coordinador academico aceptó la solicitud");
             }else{
                 System.out.println("El coordinador academico rechazó la solicitud");
@@ -60,7 +60,7 @@ class HandlerSecretaria implements SupportHandler {
         if (request.getPriority() == Priority.CRITICAL) {
             System.out.println("La secretaria se encargó de la consulta.");
             int num = (int)(Math.random() * 10);
-            if(num%10==0){
+            if(num%2==0){
                 System.out.println("La secretaria aceptó la solicitud");
             }else{
                 System.out.println("La secretaria rechazó la solicitud");
