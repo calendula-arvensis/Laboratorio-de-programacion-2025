@@ -1,12 +1,12 @@
 import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.RecursiveTask;
 
 public class ForkJoinEscuela {
 
-    static class MatrizPromedioParalelo extends RecursiveAction {
+    static class MatrizPromedioParalelo extends RecursiveTask<Void> {
         private final int[][] notas;
-        private final double[] promedios; // salida compartida (segmentos disjuntos)
+        private final double[] promedios; // salida compartida 
         private final int filaIni; // inclusivo
         private final int filaFin; // exclusivo
         private final int CANT_FILAS_MIN;
@@ -20,7 +20,7 @@ public class ForkJoinEscuela {
         }
 
         @Override
-        protected void compute() {
+        protected Void compute() {
             int cant = filaFin - filaIni; // Cantidad de filas que debe procesar
             if (cant <= CANT_FILAS_MIN) {
                 // Caso base: calcular promedio por fila
@@ -33,19 +33,20 @@ public class ForkJoinEscuela {
                     // Se calcula el promedio de cada alumno y se guarda en promedios[i]
                     promedios[i] = (double) suma / notas[i].length;
                 }
-                return;
+                return null;
             }
 
             // Si la cantidad de filas es grande, la divido en dos mitades
-            int mid = filaIni + cant / 2;
-            MatrizPromedioParalelo left = new MatrizPromedioParalelo(notas, promedios, filaIni, mid, CANT_FILAS_MIN); // Una
+            int medio = filaIni + cant / 2;
+            MatrizPromedioParalelo left = new MatrizPromedioParalelo(notas, promedios, filaIni, medio, CANT_FILAS_MIN); // Una
                                                                                                                       // mitad
-            MatrizPromedioParalelo right = new MatrizPromedioParalelo(notas, promedios, mid, filaFin, CANT_FILAS_MIN); // Otra
+            MatrizPromedioParalelo right = new MatrizPromedioParalelo(notas, promedios, medio, filaFin, CANT_FILAS_MIN); // Otra
                                                                                                                        // mitad
 
             left.fork(); // Lanzo la tarea para que un hilo la ejecute
             right.compute(); // Calculo esta otra tarea en este mismo hilo
             left.join(); // Espero que la tarea de la izquierda termine
+            return null;
         }
     }
 
@@ -108,7 +109,7 @@ public class ForkJoinEscuela {
 
         // Paralelo
         long t0 = System.nanoTime();
-        pool.invoke(new MatrizPromedioParalelo(notas, promsPar, 0, N, CANT_FILAS_MIN));
+        pool.invoke(new MatrizPromedioParalelo(notas, promsPar, 0, N, CANT_FILAS_MIN)); // Tarea raiz, hasta que no termine no se continúa con la ejecución
         long t1 = System.nanoTime();
 
         // Secuencial
