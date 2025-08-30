@@ -166,6 +166,10 @@ public class MonteCarlo {
             System.out.printf("paralelo : %8.2f ms (suma=%.3f)%n", msparalelo, sumaaparalelo);
             System.out.printf("Secuencial: %8.2f ms (suma=%.3f)%n", mssecuencial, sumaasecuencial);
             System.out.printf("Error máximo por alumno: %.6f%n", maxAbsErr);
+
+            for (int i = 0; i < 10; i++) {
+                System.out.printf("Alumno %d: P(aprobar)=%.4f notas=%s%n", i, paralelo[i], Arrays.toString(notas[i]));
+            }
         } catch (Exception exception) {
             System.out.println("Algo salió mal... :(");
         }
