@@ -3,15 +3,15 @@ import java.util.*;
 
 public class MonteCarlo {
 
-    static final double UMBRAL_APROBACION = 6.0; // nota mínima paraleloa aprobar
-    static final int MUESTRAS_MC = 1000; // simulaciones por alumno (subí paraleloa más carga)
-    static final int EVALS_POR_ALUMNO = 8; // evaluaciones históricas por alumno
+    static final double UMBRAL_APROBACION = 6.0; // Nota mínima para aprobar
+    static final int MUESTRAS_MC = 1000; // Simulaciones por alumno
+    static final int EVALS_POR_ALUMNO = 8; // Examenes por alumno anteriores
     static final int N_ALUMNOS = 200_000;
-    static final int TAMANIO_MIN = 5_000; // tamaño mínimo de bloque por hoja
+    static final int TAMANIO_MIN = 5_000; 
 
     static class ProbAprobTask extends RecursiveTask<Double> {
-        private final int[][] notasPorAlumno; // [alumno][evaluacion]
-        private final double[] probsSalida; // salida por alumno
+        private final int[][] notasPorAlumno; // Las filas son alumnos, las columnas examenes
+        private final double[] probsSalida; // Salida por alumno
         private final int ini, fin; // [ini, fin)
         private final int TAMANIO_MIN;
 
@@ -26,6 +26,7 @@ public class MonteCarlo {
         @Override
         protected Double compute() {
             int cant = fin - ini;
+            //Caso base
             if (cant <= TAMANIO_MIN) {
                 double suma = 0.0;
                 for (int i = ini; i < fin; i++) {
@@ -35,18 +36,19 @@ public class MonteCarlo {
                 }
                 return suma;
             }
+            //Si es más grande, se divide
             int medio = ini + cant / 2;
             ProbAprobTask left = new ProbAprobTask(notasPorAlumno, probsSalida, ini, medio, TAMANIO_MIN);
             ProbAprobTask right = new ProbAprobTask(notasPorAlumno, probsSalida, medio, fin, TAMANIO_MIN);
 
-            left.fork(); // lanzar mitad izquierda
-            double r = right.compute(); // calcular derecha en el hilo actual
-            double l = left.join(); // esperar izquierda
-            return l + r; // combinar
+            left.fork(); // Calcular mitad izquierda
+            double r = right.compute(); // Calcular derecha en el hilo actual
+            double l = left.join(); // Esperar izquierda
+            return l + r; // Combinar ambos lados
         }
     }
 
-    // Calula Monte Carlo por alumno (estimaciones)
+    // Calcular Monte Carlo por alumno (estimaciones)
     static double probAprobarMonteCarlo(int[] notasAlumno, int muestras, double umbral) {
         // Se calcula la media de las notas reales del alumno
         double suma = 0;
@@ -88,6 +90,7 @@ public class MonteCarlo {
         return exitos / (double) muestras; // Devuelve la probabilidad de que apruebe
     }
 
+    // Mantiene las notas entre min y max
     static double clamp(double x, double min, double max) {
         if (x < min) {
             return min;
@@ -104,6 +107,7 @@ public class MonteCarlo {
         }
     }
 
+    // Genera notas aleatorias para nAlumnos
     static int[][] generarNotas(int nAlumnos, int evals, long seed) {
         Random r = new Random(seed);
         int[][] a = new int[nAlumnos][evals];
@@ -135,21 +139,22 @@ public class MonteCarlo {
             pool.invoke(new ProbAprobTask(notas, new double[n], 0, Math.min(n, TAMANIO_MIN), TAMANIO_MIN));
             probAprobarMonteCarlo(notas[0], 200, UMBRAL_APROBACION);
 
-            // paraleloalelo
+            // Paralelo
             long t0 = System.nanoTime();
             double sumaaparalelo = pool.invoke(new ProbAprobTask(notas, paralelo, 0, n, TAMANIO_MIN));
             long t1 = System.nanoTime();
             pool.shutdown();
+
             // Secuencial
             long t2 = System.nanoTime();
             secuencialProbabilidades(notas, secuencial);
             long t3 = System.nanoTime();
 
+            // Tiempos en ms
             double msparalelo = (t1 - t0) / 1_000_000.0;
             double mssecuencial = (t3 - t2) / 1_000_000.0;
 
-            // Verificación: error máximo y sumaa total (las sumaas no serán idénticas si
-            // cambia el PRNG)
+            // Se muestran resultados y error máximo
             double maxAbsErr = 0;
             for (int i = 0; i < n; i++) {
                 maxAbsErr = Math.max(maxAbsErr, Math.abs(paralelo[i] - secuencial[i]));
