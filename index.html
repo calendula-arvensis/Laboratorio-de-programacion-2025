@@ -1,0 +1,37 @@
+<html>
+
+    <head>  <!-- Metadatos del documento -->
+        <title>Se vienen cositas</title> <!-- Titulo de la pagina -->
+        <link rel="stylesheet" href="styles.css"> <!-- Enlace a la hoja de estilos -->
+    </head>
+    <body>  <!-- Cuerpo del documento -->
+        <h1 style="color:rgb(226, 43, 137)">Hello, World!</h1> <!-- Titulo (evitar el style o el profe se va a acordar de nuestra mamá) -->
+        <h2>Welcome to my website</h2> <!-- Subtitulo -->
+        <!-- Lo mas especifico del estilo es el que se toma si ponemos muchos estilos en uno-->
+        <h2 class="tituloRojo">  Otro subtitulo 2  </h2>
+        <h3 id="holaMundo">About Me</h3> <!-- Subtitulo menor -->
+        <p>This is a simple <b>HTML</b> page.
+        <br> I am learning how to create web pages. <br/>
+        I hope you find it <i>interesting</i>!
+        <br />
+        </p> <!-- Parrafo -->
+        <div class="fondoColor"> <!-- Division o seccion -->
+        <img id = "img1" src="The_Second_Test_of_Courage21_T.webp"> <!-- Imagen con alt -->
+        <img id="img2" src="https://imgs.search.brave.com/XoTfoGBMfWBoT6aSmMc6r9v9PXXFNPi6JFRSWxdysho/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9hY2Ru/LXVzLm1pdGllbmRh/bnViZS5jb20vc3Rv/cmVzLzAwMi82MDIv/NTIzL3Byb2R1Y3Rz/L3doYXRzYXBwLWlt/YWdlLTIwMjItMTAt/MjUtYXQtMTItNTMt/MDktMTEtMDhmZjkz/MWUxNWUzYWJhZjkx/MTY3MTEyNDAxNDk4/NTUtMjQwLTAuanBl/Zw"> <!-- Imagen -->
+        </div>
+        <button onclick="moverImagenes()">Mover Imagenes</button> <!-- Boton -->
+        <br/> 
+        <ul>
+            <li><a href="https://www.google.com" target="_blank">Anda a Google</a></li>
+        </ul>
+        <script>
+            const moverImagenes = () => {
+                let img1= document.getElementById("img1");
+                let img2= document.getElementById("img2");
+                let aux = img1.src;
+                img1.src = img2.src;
+                img2.src = aux.src;
+            };
+        </script> <!-- Enlace a un archivo JavaScript externo -->
+    </body>
+</html>

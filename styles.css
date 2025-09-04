@@ -1,0 +1,31 @@
+*{
+    border: 1px solid rgb(209, 102, 138);   
+    margin: 0; /*El margen es la distancia que hay entre las cajas*/
+    padding: 4; /*La distancia que tiene el borde de las cajas con el contenido*/
+}
+
+
+
+h2{
+    color: rgb(231, 135, 196);
+}
+
+.tituloRojo{
+    color: rgb(139, 26, 26);
+    font-size: 10px;
+}
+
+/*Este es el mas especifico (ID)*/
+#holaMundo{
+    color: rgb(208, 112, 17);
+}
+
+img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%; /*Hace que la imagen sea redonda*/
+}
+
+.fondoColor{
+    background-color: rgb(109, 42, 107);
+}
